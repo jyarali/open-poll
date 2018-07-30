@@ -1,0 +1,15 @@
+extends layout
+
+block content
+  .container
+    h1 ورود
+
+    br
+    form(role='form', action="/login",method="post")
+      .form-group
+          input.form-control(type='text', name="username", placeholder='Enter Username')
+      .form-group
+        input.form-control(type='password', name="password", placeholder='Password')
+      button.btn.btn-success(type='submit') ورود
+      a(href='/' class="mx-2")
+        button.btn.btn-primary(type="button") بازگشت

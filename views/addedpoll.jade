@@ -1,0 +1,14 @@
+extends layout
+
+block content
+    h1  عنوان: #{poll.title}
+    p #{poll.question}
+    p #{poll.note}
+    p مکان: #{poll.place}
+    each answer in poll.answers
+        p   گزینه: #{answer.content} 
+            span  - تعداد آرا: #{answer.vote}
+    hr 
+    p
+      a(href="/") بازگشت به صفحه نخست
+    

@@ -1,0 +1,32 @@
+extends layout
+
+block content
+    h1 لیست نظرسنجی ها
+    each poll in polls
+        div(class="my-4 d-flex justify-content-between")
+            h4(class="") 
+                a(href='/polls/#{poll.id}').
+                  عنوان: #{poll.title}
+            div(class="d-flex justify-content-between") 
+                a(href="/poll/edit/#{poll.id}" class="btn btn-info mx-2")
+                        span ویرایش
+                form(method="post" action="/poll/del/#{poll.id}" class="form-inline form-#{poll.id}")
+                button(class="btn btn-danger" onclick="del('#{poll.id}')") حذف
+        hr
+    p
+        a(href="/") بازگشت به صفحه نخست
+
+block foot
+    script(src="/javascripts/scripts.js")
+    div(class="modal fade" id="mod3" role="dialog")
+            div(class="modal-dialog" role="document")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h5(class="modal-title") توجه
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                    div(class="modal-body")
+                        p   آیا از حذف این نظرسنجی مطمئن هستید؟
+                    div(class="modal-footer")
+                        button(type="button" class="btn btn-danger mx-2" id="confirmdel") بلی - حذف کن
+                        button(type="button" class="btn btn-success" data-dismiss="modal") خیر

@@ -1,0 +1,24 @@
+extends layout
+
+block content
+    h1 عنوان: #{poll.title}
+    //- if jvoted
+    //-     div(class="alert alert-danger" role="alert") شما قبلا در این نظرسنجی شرکت کرده اید
+    //-         p   گزینه انتخابی: #{jchosen}
+    p #{poll.note}
+    p مکان: #{poll.place}
+    //- each answer, index in poll.answers
+    //-     p #{index + 1} گزینه: #{answer.content} 
+    //-         span  - تعداد آرا: #{answer.vote}
+    
+    form(method="post" action="/poll/#{poll.id}")
+        each answer, index in poll.answers
+            div(class="form-group")
+                div(class="form-check")
+                    input(class="form-check-input" type="checkbox" name="option" id="option-#{index}" value="#{index}")
+                    label(class="form-check-label" for="option-#{index}") #{answer.content}
+                    span   -  تعداد آرا: #{answer.vote}
+         <button type="submit" class="btn btn-primary">ارسال</button>    
+    hr 
+    p
+      a(href="/polls") بازگشت به لیست 

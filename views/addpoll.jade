@@ -1,0 +1,63 @@
+extends layout
+
+block head
+    link(href="https://unpkg.com/persian-datepicker@latest/dist/css/persian-datepicker.min.css" rel="stylesheet" type="text/css")
+
+block content
+    h1 افزودن نظرسنجی
+
+    br
+    if (user)
+        form(role='form', action="/addpoll",method="post" id="addform")
+            .form-group
+                label عنوان نظرسنجی(*)
+                input.form-control(type='text', name="title", placeholder='Enter title', required="required")
+            .form-group
+                label سوال نظرسنجی(*)
+                input.form-control(type='text', name="question", placeholder='Enter question', required="required")
+            .form-group
+                label انتخاب مکان:
+                input.form-control(type='text', name="place", placeholder='Enter place')
+            .form-group
+                label انتخاب تاریخ:
+                input(class="form-control fdatepicker" type='text', name="pdate") 
+            .form-group
+                label یادداشت:
+                input.form-control(type='text', name="note", placeholder='Enter Some Note') 
+            h4(class="my-4") گزینه ها
+            div(class="input_fields_wrap")
+                button(class="add_field_button btn btn-success mb-4") افزودن گزینه
+                .form-group
+                    input.form-control(type='text', name="answers[0][content]", placeholder='گزینه 1' , required="required")
+                .form-group
+                    input.form-control(type='text', name="answers[1][content]", placeholder='گزینه 2', required="required")
+
+            button.btn.btn-success(type='submit') ارسال
+            a(href='/' style="margin:0 5px;")
+                button.btn.btn-primary(type="button") بازگشت
+    else 
+        div(class="alert alert-danger" role="alert") خطا! فقط اعضا می توانند نظرسنجی ایجاد کنند! 
+            p
+            a(href="/login") ورود
+
+block foot
+    script(src="/javascripts/scripts.js")
+    script(src="https://unpkg.com/persian-date@latest/dist/persian-date.min.js")
+    script(src="https://unpkg.com/persian-datepicker@latest/dist/js/persian-datepicker.min.js")
+    script.
+        $(document).ready(function() {
+            $(".fdatepicker").pDatepicker({
+                initialValue: false,
+                navigator:{
+                    scroll:{
+                        enabled: false
+                    }
+                },
+                timePicker: {
+                    enabled: true,
+                    meridiem: {
+                        enabled: true
+                    }
+                }
+            });
+        });

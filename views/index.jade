@@ -1,0 +1,19 @@
+extends layout
+
+block content
+  div(class="row")
+    div(class="col")
+      if (!user)
+        h1 مهمان گرامی، خوش آمدید
+        a(href="/login") ورود
+        br
+        a(href="/register") عضویت
+      if (user)
+        h1 کاربر گرامی، خوش آمدید
+        p شما هم اکنون با نام کاربری #{user.username} و آیدی: #{user.id} وارد سایت شده اید.
+        p برای افزودن نظرسنجی 
+          a(href="/addpoll") کلیک کنید
+        p برای نمایش لیست نظرسنجی های ساخته شده 
+          a(href="/polls") کلیک کنید
+        br
+        a(href="/logout") خروج

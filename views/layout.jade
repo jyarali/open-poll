@@ -1,0 +1,38 @@
+doctype html
+html(dir="rtl")
+  head
+    title= title
+    meta(name='viewport', content='width=device-width, initial-scale=1.0')
+    link(href='https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css', rel='stylesheet', media='screen')
+    link(rel='stylesheet', href='/stylesheets/style.css')
+    link(href="https://cdn.rawgit.com/rastikerdar/samim-font/v2.0.1/dist/font-face.css" rel="stylesheet" type="text/css")
+    block head
+  body
+    nav(class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top")
+      div(class="container")
+        a(class="navbar-brand" href="/") Open Poll
+        button(class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation")
+          span(class="navbar-toggler-icon")
+        div(class="collapse navbar-collapse" id="navbarResponsive")
+          ul(class="navbar-nav mr-auto")
+            li(class="nav-item active")
+              a(class="nav-link" href="/") خانه
+                span(class="sr-only") current
+            if (user)
+              li(class="nav-item")
+                a(class="nav-link" href="/addpoll") افزودن نظرسنجی
+              li(class="nav-item")
+                a(class="nav-link" href="/polls") لیست نظرسنجی ها
+              li(class="nav-item")
+                a(class="nav-link" href="/logout") خروج
+            else
+              li(class="nav-item")
+                a(class="nav-link" href="/register") عضویت
+              li(class="nav-item")
+                a(class="nav-link" href="/login") ورود
+    div(class="container my-4")
+      block content
+
+  script(src='https://code.jquery.com/jquery-3.2.1.slim.min.js')
+  script(src='https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js')
+  block foot

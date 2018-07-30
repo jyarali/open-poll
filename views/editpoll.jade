@@ -1,0 +1,58 @@
+extends layout
+block head
+    link(href="https://unpkg.com/persian-datepicker@latest/dist/css/persian-datepicker.min.css" rel="stylesheet" type="text/css")
+
+block content
+    h1 ویرایش نظرسنجی
+
+    form(role='form', action="/poll/edit/#{poll.id}",method="post" id="addform")
+        .form-group
+            label عنوان نظرسنجی
+            input.form-control(type='text', name="title", value='#{poll.title}', required="required")
+        .form-group
+            label سوال نظرسنجی:
+            input.form-control(type='text', name="question", value='#{poll.question}', required="required")
+        .form-group
+            label انتخاب مکان:
+            input.form-control(type='text', name="place", value='#{poll.place}')
+        .form-group
+            label انتخاب تاریخ:
+            input(class="form-control fdatepicker" type='text', name="pdate") 
+            span #{poll.pdate}
+        .form-group
+            label یادداشت:
+            input.form-control(type='text', name="note", value='#{poll.note}')
+        h4(class="my-4") گزینه ها
+        div(class="input_fields_wrap")
+            button(class="add_field_button btn btn-success mb-4") افزودن گزینه
+            
+            each answer, index in poll.answers
+                .form-group
+                    input.form-control(type='text' name="answers[#{index}][content]" value="#{answer.content}" required="required")
+            
+
+        button.btn.btn-success(type='submit') ارسال
+        a(href='/' style="margin:0 5px;")
+            button.btn.btn-primary(type="button") بازگشت
+
+block foot
+    script(src="/javascripts/scripts.js")
+    script(src="https://unpkg.com/persian-date@latest/dist/persian-date.min.js")
+    script(src="https://unpkg.com/persian-datepicker@latest/dist/js/persian-datepicker.min.js")
+    script.
+        $(document).ready(function() {
+            $(".fdatepicker").pDatepicker({
+                initialValue: false,
+                navigator:{
+                    scroll:{
+                        enabled: false
+                    }
+                },
+                timePicker: {
+                    enabled: true,
+                    meridiem: {
+                        enabled: true
+                    }
+                }
+            });
+        });

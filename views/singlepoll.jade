@@ -1,0 +1,114 @@
+extends layout
+
+block content
+    h1 عنوان: #{poll.title}
+    div(class="row my-4")
+        div.col-sm-8
+            input.form-control(type='text' id="link" value="#{host}" readonly="readonly")
+        div.col-sm-4
+            button(class="btn btn-primary" onclick="copylink()")  کپی لینک
+    if jvoted
+        div(class="alert alert-danger" role="alert") شما قبلا در این نظرسنجی شرکت کرده‌اید!
+            p گزینه انتخابی: #{jchosen}
+    p #{poll.note}
+    p #{poll.pdate}
+    p #{poll.place}
+    //- each answer, index in poll.answers
+    //-     p #{index + 1} گزینه: #{answer.content} 
+    //-         span  - تعداد آرا: #{answer.vote}
+    h2(class="my-4") #{poll.question}
+    if !jvoted
+        form(method="post" action="/poll/#{poll.id}" id="poll")
+            each answer, index in poll.answers
+                div(class="form-group")
+                    div(class="form-check")
+                        input(class="form-check-input" type="checkbox" name="option" id="option-#{index}" value="#{index}")
+                        label(class="form-check-label" for="option-#{index}") #{answer.content}
+                        span   -  تعداد آرا: #{answer.vote}
+            button(type="submit" class="btn btn-primary")
+                span ارسال  
+    else
+        form(method="post" action="/poll/#{poll.id}" id="voted")
+            each answer, index in poll.answers
+                div(class="form-group")
+                    div(class="form-check")
+                        input(class="form-check-input" type="checkbox" name="option" id="option-#{index}" value="#{index}")
+                        label(class="form-check-label" for="option-#{index}") #{answer.content}
+                        span   -  تعداد آرا: #{answer.vote}
+            button(type="submit" class="btn btn-danger")
+                span حذف رای
+    hr 
+    div
+        <canvas id="chart-area"> </canvas>
+    hr(class="my-4")
+    p
+      a(href="/polls") بازگشت به لیست 
+
+block foot
+    script(src="/javascripts/scripts.js")
+    script(src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js")
+     
+    
+    script.
+            var data = !{JSON.stringify(poll.answers)};
+            var chdata = [];
+            var titles = []
+            for (var i = 0; i<data.length;i++){
+                chdata.push(data[i].vote);
+                titles.push(data[i].content);
+            }
+            var config = {
+                type: 'pie',
+                data: {
+                    datasets: [{
+                        data: chdata,
+                        backgroundColor: [
+                           '#FF6633', '#FFB399', '#FF33FF', '#FFFF99', '#00B3E6', 
+                            '#E6B333', '#3366E6', '#999966', '#99FF99', '#B34D4D',
+                            '#80B300', '#809900', '#E6B3B3', '#6680B3', '#66991A', 
+                            '#FF99E6', '#CCFF1A', '#FF1A66', '#E6331A', '#33FFCC',
+                            '#66994D', '#B366CC', '#4D8000', '#B33300', '#CC80CC', 
+                            '#66664D', '#991AFF', '#E666FF', '#4DB3FF', '#1AB399',
+                            '#E666B3', '#33991A', '#CC9999', '#B3B31A', '#00E680', 
+                            '#4D8066', '#809980', '#E6FF80', '#1AFF33', '#999933',
+                            '#FF3380', '#CCCC00', '#66E64D', '#4D80CC', '#9900B3', 
+                            '#E64D66', '#4DB380', '#FF4D4D', '#99E6E6', '#6666FF'
+                        ],
+                        label: ''
+                    }],
+                    labels: titles
+                },
+                options: {
+                    responsive: true
+                }
+            };
+            window.onload = function() {
+                var ctx = document.getElementById('chart-area').getContext('2d');
+                window.myPie = new Chart(ctx, config);
+            };
+
+
+
+    div(class="modal fade" id="mod1" role="dialog")
+            div(class="modal-dialog" role="document")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h5(class="modal-title") توجه
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                    div(class="modal-body")
+                        p   لطفا یکی از گزینه ها را انتخاب کنید
+                    div(class="modal-footer")
+                        button(type="button" class="btn btn-secondary" data-dismiss="modal") بستن
+
+    div(class="modal fade" id="mod2" role="dialog")
+            div(class="modal-dialog" role="document")
+                div(class="modal-content")
+                    div(class="modal-header")
+                        h5(class="modal-title") توجه
+                        button(type="button" class="close" data-dismiss="modal" aria-label="Close")
+                            span(aria-hidden="true") &times;
+                    div(class="modal-body")
+                        p   فقط می‌توانید یکی از گزینه ها را انتخاب کنید
+                    div(class="modal-footer")
+                        button(type="button" class="btn btn-secondary" data-dismiss="modal") بستن
