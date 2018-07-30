@@ -210,17 +210,30 @@ router.post('/poll/edit/:pollId', (req, res) => {
             .then(result => {
                 if (req.user.id == result.userid) {
                     var allans = req.body.answers;
+                    console.log(allans);
                     // allans.forEach(element => {
                     //     element.content = allans.content;
                     // });
                     result.title = req.body.title,
-                    result.question = req.body.question,
-                    result.place = req.body.place,
-                    result.pdate = req.body.pdate,
-                    result.note = req.body.note;
+                        result.question = req.body.question,
+                        result.place = req.body.place,
+                        result.pdate = req.body.pdate,
+                        result.note = req.body.note;
                     for (var i = 0; i < allans.length; i++) {
-                        result.answers[i].content = allans[i].content;
+                        if (i < result.answers.length) {
+                            // check options that not modified and preserve votes and just edit contents
+                            // otherwise, votes would be removed!
+                            result.answers[i].content = allans[i].content;
+                        } else {
+                            // if added new option, then add it to answers array and new option should have 0 vote
+                            result.answers.push({
+                                content: allans[i].content,
+                                vote: 0
+                            });
+                        }
                     }
+                    // When you use the Array type in your schema (same as the Mixed type in the docs), you need to explicitly mark the field as modified or Mongoose won't save any changes you make to it
+                    result.markModified('answers');
                     result.save()
                         .then(newpoll => {
                             res.render('success');
